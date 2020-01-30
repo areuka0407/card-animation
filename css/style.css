@@ -1,0 +1,208 @@
+@charset "UTF-8";
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Nanum Square", sans-serif;
+}
+ul, ol { list-style: none; }
+a, a:hover { text-decoration: none; }
+
+body {
+    overflow: hidden;
+}
+
+#wrap {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: #f2f2f2;
+    overflow-x: hidden;
+    overflow-y: auto;
+    transition: 0.5s left;
+}
+
+/* Header
+*/
+
+header {
+    width: 100%;
+    height: 80px;
+    line-height: 80px;
+    background-color: #fffa;
+    box-shadow: 0 0 10px 5px #00000020;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 100;
+}
+
+#logo {
+    font-family: Segoe UI, sans-serif;
+    font-weight: 900;
+    font-size: 1.8em;
+    background: linear-gradient(90deg, #38ffb3 0%, #3b2df3 25%, #b42df3 50%, #ec2db3 75%, #ff395a 100%);
+    background-size: 1000% 100%;
+    background-position: 0% center;
+
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+
+    animation: logoAnime 20s infinite;
+}
+
+@keyframes logoAnime {
+    0% { background-position: 0% center; }
+    50% { background-position: 100% center; }
+    100% { background-position: 0% center; }
+}
+
+.btn-aside {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    margin-top: -35px;
+    width: 70px;
+    height: 70px;
+    cursor: pointer;
+    transition: transform 0.5s;
+}
+
+.btn-aside span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -25px;
+    display: inline-block;
+    width: 50px;
+    height: 2px;
+    background-color: #202020;
+    border-radius: 1px;
+    transition: transform 0.5s, margin-top 0.5s;
+}
+
+.btn-aside span:nth-child(1){
+    margin-top: calc(-1px + -15px);
+}
+
+.btn-aside span:nth-child(2) {
+    margin-top: -1px;
+}
+
+.btn-aside span:nth-child(3){
+    margin-top: calc(-1px + 15px);
+}
+
+
+/* ASIDE */
+
+
+#trigger-aside:checked ~ aside { right: 0; }
+#trigger-aside:checked ~ header .btn-aside { transform: rotate(-90deg); } 
+#trigger-aside:checked ~ header .btn-aside span:nth-child(2n-1)
+{ transform: rotate(45deg); margin-top: -1px; }
+#trigger-aside:checked ~ header .btn-aside span:nth-child(2n)
+{ transform: rotate(-45deg); }
+
+
+aside {
+    position: fixed;
+    width: 350px;
+    right:-350px;
+    height: 100%;
+    background-color: #fff;
+    top: 0;
+    z-index: 99;
+    padding: 100px 20px 20px;
+    box-shadow: 0 0 5px 3px #00000010;
+    transition: right 0.5s;
+    color: #202020;
+}
+
+aside ul, li { 
+    margin: 20px 0;
+}
+
+
+/* List
+*/
+
+#list {
+    width: 1140px;
+    height: 100%;
+    position: absolute;
+    top: 100px;
+    left: 50%;
+    margin-left: calc(-1140px / 2);
+}
+
+#list .card {
+    position: absolute;
+    width: calc(100% / 5 - 30px);
+    border-radius: 10px;
+    overflow: hidden;
+    opacity: 0;
+}
+
+#list .card:hover {
+    cursor: pointer;
+    box-shadow: 0 0 10px 5px #00000010;
+}
+
+#list .card:last-child { margin-bottom: 30px; }
+
+#list .card .image {
+    background-size: cover;
+    background-position: center 50%;
+    height: 150px;
+}
+
+#list .card .info { padding: 20px; }
+
+
+#list .card .title { color: #343a40; }
+#list .card .title, #list .card .artist {
+    display: inline-block;
+    width: 100%;
+    height: 21px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+#list .card .badge {
+    position: absolute;
+    left: 0;
+    top: 20px;
+    background-color: #29CD8F;
+    color: #fff;
+    padding: 10px 20px 10px 15px;
+    border-radius: 0 30px 30px 0;
+    font-weight: 900;
+    box-shadow: 0 0 8px 3px #00000050;
+    font-size: 1em;
+}
+
+#list .card .badge .price { display: none; }
+
+#list .card:hover .badge { background-color: #2a82d4; }
+#list .card:hover .number { display: none; }
+#list .card:hover .price { display: block; }
+
+
+/* 카드 보조선 */
+#list .card-line {
+    position: absolute;
+    height: 250px;
+    border: 5px dotted #2a82d4;
+    z-index: 49;
+}
+
+
+footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
