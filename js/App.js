@@ -6,11 +6,24 @@ class App {
         this.$list = document.querySelector("#list");
         this.$cardLine = document.createElement("div"); // 드래그 시 보여지는 보조라인
         this.$cardLine.classList.add("card-line");
+        
 
         this.albumList = [];
         this.loadCount = 0;
-        this.loadData();
         this.setEvents();
+        
+        // category 추가
+        this.$catBox = document.querySelector("#cat-box");
+        this.catList = [];
+        data.forEach(x => {
+            if(!this.catList.includes(x.category)){
+                this.catList.push(x.category);
+
+                let li = document.createElement("li");
+                li.dataset.value = li.innerText = x.category;
+                this.$catBox.append(li);
+            }
+        });
     }
 
     get cardWidth(){
@@ -168,4 +181,5 @@ class App {
 
 window.onload = () => {
     const app = new App();
+    app.loadData();
 };

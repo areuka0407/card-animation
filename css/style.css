@@ -1,5 +1,10 @@
 @charset "UTF-8";
 
+:root {
+    --green: #29CD8F;
+    --blue: #2a82d4;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -106,14 +111,74 @@ aside {
     background-color: #fff;
     top: 0;
     z-index: 99;
-    padding: 100px 20px 20px;
+    padding: 120px 20px 20px;
     box-shadow: 0 0 5px 3px #00000010;
     transition: right 0.5s;
     color: #202020;
 }
 
-aside ul, li { 
-    margin: 20px 0;
+
+.search-box {
+    width: 100%;
+    height: 40px;
+    border: 1px solid #ddd;
+    margin: 5px 0;
+    overflow: hidden;
+    position: relative;
+}
+
+.search-box input {
+    position: absolute;
+    left: 20px;
+    top: 0;
+    width: calc(100% - 70px);
+    height: 100%;
+    border: 0;
+    outline: 0;
+}
+
+.search-box button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 50px;
+    height: 100%;
+    border: 0;
+    outline: 0;
+    background-color: #202020;
+    color: #fff;
+}
+
+aside h5 { 
+    height: 50px;
+    line-height: 50px;
+}
+
+#cat-box li {
+    position: relative;
+    height: 50px;
+    line-height: 50px;
+    padding: 0 5px;
+    border-bottom: 0.1px solid #ddd;
+    cursor: pointer;
+    font-size: 0.95em;
+    color: #505050;
+}
+#cat-box li:first-child { border-top: 0.1px solid #ddd; }
+#cat-box li:hover { font-weight: 900; }
+
+#cat-box li.active {
+    font-weight: 900;
+    padding-left: 15px;
+}
+#cat-box li.active::before {
+    content: '·';
+    position: absolute;
+    left: -10px;
+    top: 0;
+    height: 50px;
+    width: 30px;
+    text-align: center;
 }
 
 
@@ -167,7 +232,7 @@ aside ul, li {
     position: absolute;
     left: 0;
     top: 20px;
-    background-color: #29CD8F;
+    background-color: var(--green);
     color: #fff;
     padding: 10px 20px 10px 15px;
     border-radius: 0 30px 30px 0;
@@ -178,7 +243,7 @@ aside ul, li {
 
 #list .card .badge .price { display: none; }
 
-#list .card:hover .badge { background-color: #2a82d4; }
+#list .card:hover .badge { background-color: var(--blue); }
 #list .card:hover .number { display: none; }
 #list .card:hover .price { display: block; }
 

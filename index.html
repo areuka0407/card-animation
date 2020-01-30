@@ -10,6 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="css/style.css">
+    <script src="https://kit.fontawesome.com/d996c53776.js" crossorigin="anonymous"></script>
     <script src="js/data.js"></script>
     <script src="js/Card.js"></script>
     <script src="js/App.js"></script>
@@ -30,10 +31,17 @@
 
     <!-- ASIDE -->
     <aside>
-        <ul>
-            <li>CATEGORY-1</li>
-            <li>CATEGORY-2</li>
-            <li>CATEGORY-3</li>
+        <h5>키워드로 검색</h5>
+        <div class="search-form mb-5">
+            <div class="search-box">
+                <input type="text" id="i-search" placeholder="ex: ㄱㄴㅅㅌㅇ → 강남스타일">
+                <button id="btn-search"><i class="fas fa-search"></i></button>
+            </div>
+            <small class="text-muted">＊초성으로 앨범을 검색할 수 있습니다.</small><br>
+        </div>
+        <h5>카테고리로 검색</h5>
+        <ul id="cat-box">
+            <li class="active">전체보기</li>
         </ul>        
     </aside>
     
