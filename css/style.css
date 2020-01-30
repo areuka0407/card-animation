@@ -14,6 +14,8 @@
 ul, ol { list-style: none; }
 a, a:hover { text-decoration: none; }
 
+html, body { scroll-behavior: smooth; }
+
 body {
     background-color: #f2f2f2;
     overflow-x: hidden;
@@ -257,8 +259,19 @@ aside h5 {
 }
 
 
-footer {
-    position: absolute;
-    bottom: 0;
-    left: 0;
+/* 위로 가기
+*/
+
+#btn-scroll-up {
+    position: fixed;
+    left: 50px;
+    bottom: 50px;
+    width: 80px;
+    height: 50px;
+    line-height: 50px;
+    border-radius: 5px;
+    background-color: #202020;
+    color: #fff;
+    text-align: center;
+    font-size: 2em;
 }

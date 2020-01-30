@@ -1,3 +1,28 @@
+String.prototype.searchMatch = function(text){
+    let exp = this;
+
+    // Escaping
+    exp = exp.replace(/([\\/\\[\\(^$.*+])/g, match => "\\" + match);
+
+    // 초성검색
+    exp = exp.replace(/ㄱ/g, "(ㄱ|[가-깋])");
+    exp = exp.replace(/ㄴ/g, "(ㄴ|[나-닣])");
+    exp = exp.replace(/ㄷ/g, "(ㄷ|[다-딯])");
+    exp = exp.replace(/ㄹ/g, "(ㄹ|[라-맇])");
+    exp = exp.replace(/ㅁ/g, "(ㅁ|[마-밓])");
+    exp = exp.replace(/ㅂ/g, "(ㅂ|[바-빟])");
+    exp = exp.replace(/ㅅ/g, "(ㅅ|[사-싷])");
+    exp = exp.replace(/ㅇ/g, "(ㅇ|[아-잏])");
+    exp = exp.replace(/ㅈ/g, "(ㅈ|[자-짛])");
+    exp = exp.replace(/ㅊ/g, "(ㅊ|[차-칳])");
+    exp = exp.replace(/ㅋ/g, "(ㅋ|[카-킿])");
+    exp = exp.replace(/ㅌ/g, "(ㅌ|[타-팋])");
+    exp = exp.replace(/ㅍ/g, "(ㅍ|[파-핗])");
+    exp = exp.replace(/ㅎ/g, "(ㅎ|[하-힣])");
+
+    return new RegExp(exp).test(text);
+};
+
 class App {
     static COLUMN = 4;
     static ROW = 9;
@@ -7,10 +32,16 @@ class App {
         this.$cardLine = document.createElement("div"); // 드래그 시 보여지는 보조라인
         this.$cardLine.classList.add("card-line");
         
+        // Filter
+        this.$i_search = document.querySelector("#i-search");
+        this.$b_search = document.querySelector("#b-search");
+        this.filter = {
+            category: "",
+            albumName: "",
+        };
 
         this.albumList = [];
         this.loadCount = 0;
-        this.setEvents();
         
         // category 추가
         this.$catBox = document.querySelector("#cat-box");
@@ -21,9 +52,12 @@ class App {
 
                 let li = document.createElement("li");
                 li.dataset.value = li.innerText = x.category;
+
                 this.$catBox.append(li);
             }
         });
+
+        this.setEvents();
     }
 
     get cardWidth(){
@@ -34,11 +68,31 @@ class App {
         this.albumList.forEach(album => album.W = width);
     }
 
-    loadData(){
+    loadData(reset = false){
         const BLOCK = App.COLUMN * App.ROW;
         this.$cardLine.style.width = this.cardWidth + "px";
 
-        let newList = data.splice(0, BLOCK).map((x, i) => new Card(this, x, i + this.albumList.length)) ;
+        if(reset){
+            this.albumList = [];
+            this.$list.innerHTML = "";
+            this.loadCount = 0;
+        }
+
+        /**
+         * 검열
+         */
+        let copied = data.slice(0);         // 내용물 복사
+        copied = copied.filter((x) => {
+            const {albumName, category} = this.filter;
+            let nameCheck = albumName.searchMatch(x.albumName);
+            let catCheck = category.trim() === "" || category === x.category;
+            
+            return nameCheck && catCheck;
+        });
+        let start = this.loadCount * BLOCK;
+
+        let newList = copied.slice(start, start + BLOCK).map((x, i) => new Card(this, x, i + this.albumList.length)) ;
+        
         if(newList.length === 0) return -1;
         
         newList.forEach(album => {
@@ -84,6 +138,9 @@ class App {
     }
 
     setEvents(){
+        /**
+         * Window Events
+         */
         // 스크롤 이벤트
         let ticking = false;
         window.addEventListener("scroll", e => {
@@ -164,6 +221,41 @@ class App {
 
         // 드래그 종료
         window.addEventListener("mouseup", e => this.dragEnd());
+
+        /**
+         * Filter Events
+         */
+        const search = () => {
+            let keyword = this.$i_search.value.trim();
+            this.filter.albumName = keyword;
+            this.loadData(true)
+        };
+
+        let keyEvents;
+        this.$i_search.addEventListener("keydown", e => {
+            if(e.keyCode === 13) {
+                if(keyEvents) clearTimeout(keyEvents);
+                search();
+            }
+            else {
+                if(keyEvents) clearTimeout(keyEvents);
+                keyEvents = setTimeout(() => search(), 1000);
+            }
+        });
+        this.$b_search.addEventListener("click", () => search());
+
+
+        document.querySelectorAll("#cat-box > li").forEach(x => {
+            x.addEventListener("click", () => {
+                let exist = document.querySelector("#cat-box > li.active");
+                exist && exist.classList.remove("active");
+                x.classList.add("active");
+
+                this.filter.category = x.dataset.value;
+                this.loadData(true);
+            });
+        });
+        
     }
 
     showAlbumInScreen(){
