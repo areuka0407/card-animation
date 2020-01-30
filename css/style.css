@@ -10,17 +10,8 @@ ul, ol { list-style: none; }
 a, a:hover { text-decoration: none; }
 
 body {
-    overflow: hidden;
-}
-
-#wrap {
-    position: fixed;
-    width: 100%;
-    height: 100%;
     background-color: #f2f2f2;
     overflow-x: hidden;
-    overflow-y: auto;
-    transition: 0.5s left;
 }
 
 /* Header
@@ -138,6 +129,8 @@ aside ul, li {
     margin-left: calc(-1140px / 2);
 }
 
+#list::after { content: ''; position: absolute; bottom: -30px; width: 100%; height: 30px; }
+
 #list .card {
     position: absolute;
     width: calc(100% / 5 - 30px);
@@ -150,8 +143,6 @@ aside ul, li {
     cursor: pointer;
     box-shadow: 0 0 10px 5px #00000010;
 }
-
-#list .card:last-child { margin-bottom: 30px; }
 
 #list .card .image {
     background-size: cover;

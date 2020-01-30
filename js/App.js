@@ -3,7 +3,6 @@ class App {
     static ROW = 9;
 
     constructor(){
-        this.$wrap = document.querySelector("#wrap");
         this.$list = document.querySelector("#list");
         this.$cardLine = document.createElement("div"); // 드래그 시 보여지는 보조라인
         this.$cardLine.classList.add("card-line");
@@ -26,10 +25,7 @@ class App {
         const BLOCK = App.COLUMN * App.ROW;
         this.$cardLine.style.width = this.cardWidth + "px";
 
-        let start = BLOCK * this.loadCount++;
-        let end = start + BLOCK;
-
-        let newList = data.splice(start, end).map((x, i) => new Card(this, x, i + this.albumList.length)) ;
+        let newList = data.splice(0, BLOCK).map((x, i) => new Card(this, x, i + this.albumList.length)) ;
         if(newList.length === 0) return -1;
         
         newList.forEach(album => {
@@ -43,6 +39,11 @@ class App {
         });
         this.albumList = this.albumList.concat(newList);
         this.showAlbumInScreen();
+        this.loadCount++;
+
+        let rowCount = Math.ceil(this.albumList.length / App.COLUMN);
+        this.$list.style.height = 250 * rowCount + Card.ROW_GAB * (rowCount - 1) + "px";
+
     }
 
     dragStart(album){
@@ -72,14 +73,15 @@ class App {
     setEvents(){
         // 스크롤 이벤트
         let ticking = false;
-        this.$wrap.addEventListener("scroll", e => {
+        window.addEventListener("scroll", e => {
             if(!ticking){                       // 빠른 스크롤 방지
                 requestAnimationFrame(() => {
-                    const {scrollTop, scrollHeight, offsetHeight} = this.$wrap;
+                    const {scrollY, innerHeight} = window;
+                    const {offsetHeight, offsetTop} = this.$list;
                     this.showAlbumInScreen();
                     ticking = false;
 
-                    if(scrollTop + offsetHeight ===  scrollHeight){
+                    if(scrollY + innerHeight === offsetHeight + offsetTop + 30){
                         this.loadData();
                     }
                 });
@@ -90,16 +92,15 @@ class App {
         // 드래그 대상을 움직이는 이벤트
         window.addEventListener("mousemove", e => {
             if(!this.dragTarget || e.which !== 1) return;
-            
-            
 
-            let x = e.clientX + this.$wrap.scrollLeft - this.$list.offsetLeft;
-            let y = e.clientY + this.$wrap.scrollTop - this.$list.offsetTop;
+            const {pageX, pageY} = e;
+            const {offsetLeft, offsetTop} = this.$list;
 
-            console.log(x, y);
+            this.dragTarget.X = pageX - parseInt(this.dragTarget.$root.dataset.x);
+            this.dragTarget.Y = pageY - parseInt(this.dragTarget.$root.dataset.y);
 
-            this.dragTarget.X = x - parseInt(this.dragTarget.$root.dataset.x);
-            this.dragTarget.Y = y - parseInt(this.dragTarget.$root.dataset.y);
+            let x = pageX - offsetLeft;
+            let y = pageY - offsetTop;
 
             let overlap = this.albumList.find(album => album !== this.dragTarget && album.contain(x, y) && album.alpha == 1);
             if(overlap){
@@ -153,8 +154,8 @@ class App {
     }
 
     showAlbumInScreen(){
-        let startY = this.$wrap.scrollTop;
-        let endY = startY + this.$wrap.offsetHeight;
+        let startY = window.scrollY;
+        let endY = startY + window.innerHeight;
         
         this.albumList.forEach(album => {
             const compare = album.Y + album.H / 2

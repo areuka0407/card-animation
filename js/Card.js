@@ -50,9 +50,8 @@ class Card {
 
             
             this.app.dragStart(this);
-            const {clientX, clientY} = e;
-            this.$root.dataset.x = this.app.$wrap.scrollLeft +  clientX - this.X - this.app.$list.offsetLeft;
-            this.$root.dataset.y = this.app.$wrap.scrollTop + clientY - this.Y - this.app.$list.offsetTop;
+            this.$root.dataset.x = e.pageX - this.X;
+            this.$root.dataset.y = e.pageY - this.Y;
             
         });
     }
@@ -98,7 +97,6 @@ class Card {
         setTimeout(() => {
             this.alpha = 1;
             this.X = X;
-            setTimeout(() => this.transition = [], 1000);
         }, 200 * this.column);
     }
 
